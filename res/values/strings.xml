@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Overcast Network</string>
+    <string name="action_settings">I just changed this</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="Kills">0 Kills</string>
+    <string name="Deaths">0 Deaths</string>
+
+</resources>

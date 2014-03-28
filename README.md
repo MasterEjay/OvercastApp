@@ -1,4 +1,9 @@
-OvercastApp
-===========
+OCNA
+====
+The unofficial Overcast Network app for checking stats and more [WIP]
 
-An (unofficial) app for Overcast Network
+**TODO**
+
+* Full stats (Partial)
+* Servers (X)
+* Forums (X)

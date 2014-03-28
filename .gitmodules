@@ -1,0 +1,3 @@
+[submodule "OCNA.git"]
+	path = OCNA.git
+	url = git@github.com:MasterEjay/OCNA.git
