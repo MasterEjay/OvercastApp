@@ -1,9 +1,4 @@
 OCNA
 ====
-The unofficial Overcast Network app for checking stats and more [WIP]
+The unofficial Overcast Network app for checking stats and forums [WIP]
 
-**TODO**
-
-* Full stats (Partial)
-* Servers (X)
-* Forums (X)
