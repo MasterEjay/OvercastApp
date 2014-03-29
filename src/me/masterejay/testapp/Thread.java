@@ -8,6 +8,12 @@ import android.webkit.WebView;
 import android.widget.Toast;
 import me.masterejay.testapp.widget.UITableView;
 import me.masterejzz.testapp.R;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 
 /**
  * @author MasterEjay
@@ -15,6 +21,7 @@ import me.masterejzz.testapp.R;
 public class Thread extends Activity {
 
 	WebView webview;
+	Document doc;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,15 @@ public class Thread extends Activity {
 	public void initWebView(){
 		Bundle b = getIntent().getExtras();
 		String link = b.getString("link");
-		webview.loadUrl(link);
+		try {
+			doc = Jsoup.connect(link).userAgent("Mozilla").get();
+		} catch (IOException e) {
+			e.printStackTrace();
+			Toast.makeText(Thread.this, "Something went wrong! Are you sure you're online?", Toast.LENGTH_LONG).show();
+			return;
+		}
+		Element e = doc.getElementsByClass("span9").get(0);
+
+		webview.loadData(e.html(), "text/html", null);
 	}
 }
