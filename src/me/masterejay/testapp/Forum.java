@@ -2,6 +2,7 @@ package me.masterejay.testapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -35,7 +36,8 @@ public class Forum extends Activity{
 
 		tableView = (UITableView) findViewById(R.id.tableView);
 
-		parsePage();
+		 sendAsyncTask();
+
 		Log.d("Forum","total items: "+ tableView.getCount());
 	}
 
@@ -51,6 +53,11 @@ public class Forum extends Activity{
 		}
 		tableView.commit();
 
+	}
+
+	public void sendAsyncTask(){
+		ParseTask task = new ParseTask();
+		task.doInBackground(null);
 	}
 
 
@@ -71,34 +78,43 @@ public class Forum extends Activity{
 	}
 
 
-	public void parsePage(){
-				try {
-					doc = Jsoup.connect("http://oc.tc/forums").userAgent("Mozilla").get();
-				} catch (IOException e) {
-					e.printStackTrace();
-					Toast.makeText(Forum.this, "Something went wrong! Are you sure you're online?", Toast.LENGTH_LONG).show();
-					return;
-					}
-
-					Elements topics = doc.getElementsByClass("topic");
-					for (int i = 0; i < topics.size(); i++){
-						Element e = topics.get(i);
-						Elements td = e.getElementsByClass("td");
-						for (int i2 = 0; i2 <= td.size(); i2++){
-							Elements titleElement = e.getElementsByAttributeValueContaining("href", "topics");
-							Elements authorElement = e.getElementsByAttributeValueContaining("style", "color");
-							String author = authorElement.text().split(" ")[0];
-							String title = titleElement.text();
-							String link = "https://oc.tc/" + titleElement.attr("href").split("/unread")[0];
-							Elements dateElement = e.getElementsByTag("span");
-							String date = dateElement.text();
-							entries.add(new ForumEntry(author, date, title, link));
-
-						}
-					}
-					createList();
-					Elements startedBy = topics.addClass("started-by");
+	protected class ParseTask extends AsyncTask<String, String, String> {
+		public void parsePage(){
+			try {
+				doc = Jsoup.connect("http://oc.tc/forums").userAgent("Mozilla").get();
+			} catch (IOException e) {
+				e.printStackTrace();
+				Toast.makeText(Forum.this, "Something went wrong! Are you sure you're online?", Toast.LENGTH_LONG).show();
+				return;
 			}
+
+			Elements topics = doc.getElementsByClass("topic");
+			for (int i = 0; i < topics.size(); i++){
+				Element e = topics.get(i);
+				Elements td = e.getElementsByClass("td");
+				for (int i2 = 0; i2 <= td.size(); i2++){
+					Elements titleElement = e.getElementsByAttributeValueContaining("href", "topics");
+					Elements authorElement = e.getElementsByAttributeValueContaining("style", "color");
+					String author = authorElement.text().split(" ")[0];
+					String title = titleElement.text();
+					String link = "https://oc.tc/" + titleElement.attr("href").split("/unread")[0];
+					Elements dateElement = e.getElementsByTag("span");
+					String date = dateElement.text();
+					entries.add(new ForumEntry(author, date, title, link));
+
+				}
+			}
+			createList();
+		}
+
+		@Override
+		protected String doInBackground(String... params){
+		   parsePage();
+			return null;
+		}
+	}
+
+
 	}
 
 
