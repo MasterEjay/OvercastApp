@@ -43,17 +43,30 @@ public class Forum extends Activity{
 		CustomClickListener listener = new CustomClickListener();
 		tableView.setClickListener(listener);
 		tableView.clear();
+		int index = 0;
 		for (ForumEntry e : entries){
-			tableView.addBasicItem(e.getTopicName(), e.getPoster());
+			tableView.addBasicItem(e.getTopicName(), e.getPoster() + " posted " + e.getDate());
+			e.setIndex(index);
+			index++;
 		}
 		tableView.commit();
 
 	}
 
+
+	public ForumEntry getEntryFromId(int id){
+		for (ForumEntry e : entries){
+			if (id == e.getIndex()){
+				return e;
+			}
+		}
+		return null;
+	}
+
 	private class CustomClickListener implements UITableView.ClickListener{
 		@Override
 		public void onClick(int index) {
-			Toast.makeText(Forum.this, "item clicked: " + index, Toast.LENGTH_SHORT).show();
+			Toast.makeText(Forum.this, "item clicked: " + getEntryFromId(index).getLink(), Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -76,8 +89,10 @@ public class Forum extends Activity{
 							Elements authorElement = e.getElementsByAttributeValueContaining("style", "color");
 							String author = authorElement.text().split(" ")[0];
 							String title = titleElement.text();
-
-							entries.add(new ForumEntry(author, title));
+							String link = "https://oc.tc/" + titleElement.attr("href").split("/unread")[0];
+							Elements dateElement = e.getElementsByTag("span");
+							String date = dateElement.text();
+							entries.add(new ForumEntry(author, date, title, link));
 
 						}
 					}
