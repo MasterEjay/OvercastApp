@@ -25,6 +25,7 @@
             </intent-filter>
         </activity>
         <activity android:label="@string/app_name" android:name="me.masterejay.testapp.Forum" android:screenOrientation="portrait"/>
+        <activity android:label="@string/app_name" android:name="me.masterejay.testapp.Thread" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

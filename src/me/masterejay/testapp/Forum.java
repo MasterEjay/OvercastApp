@@ -73,7 +73,11 @@ public class Forum extends Activity{
 	private class CustomClickListener implements UITableView.ClickListener{
 		@Override
 		public void onClick(int index) {
-			Toast.makeText(Forum.this, "item clicked: " + getEntryFromId(index).getLink(), Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(Forum.this, Thread.class);
+			Bundle b = new Bundle();
+			b.putString("link", getEntryFromId(index).getLink()); //Your id
+			intent.putExtras(b); //Put your id to your next Intent
+			startActivity(intent);
 		}
 	}
 
