@@ -9,12 +9,23 @@ public class ForumEntry {
 	String topicName;
 	String replies;
 	String views;
+	String link;
 
-	public ForumEntry(String poster,String topicName,String replies,String views){
+	public ForumEntry(String poster,String topicName){
 		this.poster=poster;
 		this.topicName=topicName;
-		this.replies=replies;
-		this.views=views;
+	}
+
+	public String getLink(){
+		return link;
+	}
+
+	public ForumEntry(String poster, String topicName, String replies, String views, String link){
+		this.poster = poster;
+		this.topicName = topicName;
+		this.replies = replies;
+		this.views = views;
+		this.link = link;
 	}
 
 	public String getPoster(){
