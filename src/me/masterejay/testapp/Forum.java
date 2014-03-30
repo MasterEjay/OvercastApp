@@ -145,6 +145,8 @@ public class Forum extends Activity{
 	}
 
 
+
+
 	}
 
 

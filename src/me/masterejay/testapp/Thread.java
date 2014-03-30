@@ -4,7 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.Toast;
 import me.masterejay.testapp.widget.UITableView;
 import me.masterejzz.testapp.R;
@@ -18,27 +23,49 @@ import java.io.IOException;
 /**
  * @author MasterEjay
  */
-public class Thread extends Activity {
+public class Thread extends Activity implements CustomWebView.OnBottomReachedListener{
 
-	WebView webview;
+	CustomWebView webview;
 	Document doc;
-
+	int currentPage = 0;
+	int totalPages= 0;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-
-		StrictMode.setThreadPolicy(policy);
-
 		setContentView(R.layout.thread);
-		webview = (WebView) findViewById(R.id.webView);
-		initWebView();
+		StrictMode.setThreadPolicy(policy);
+		webview = (CustomWebView) findViewById(R.id.webView);
+		Bundle b = getIntent().getExtras();
+		String link = b.getString("link");
+		initWebView(link);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.thread_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+			case R.id.forward:
+				goForward();
+				return true;
+			case R.id.back:
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 
-	public void initWebView(){
-		Bundle b = getIntent().getExtras();
-		String link = b.getString("link");
+	public void initWebView(String link){
+
 		try {
 			doc = Jsoup.connect(link).userAgent("Mozilla").get();
 		} catch (IOException e) {
@@ -48,8 +75,7 @@ public class Thread extends Activity {
 		}
 		Element e = doc.getElementsByClass("span9").get(0);
 		Elements buttons = doc.getElementsByClass("btn-group");
-		int currentPage = 0;
-		int totalPages= 0;
+
 		Element pages;
 		try {
 			 pages = buttons.addClass("pull-left").get(0);
@@ -77,6 +103,84 @@ public class Thread extends Activity {
 			}
 		}
 		Toast.makeText(Thread.this, "You are on " + currentPage + " of " + totalPages, Toast.LENGTH_LONG).show();
-		webview.loadDataWithBaseURL("http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css", e.html(), "text/html", "utf-8", null);
+		if (webview != null){
+			webview.loadDataWithBaseURL("http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css", e.html(),"text/html","utf-8",null);
+		}
 	}
+
+
+	public void goForward(){
+		if (totalPages == 1){
+			Toast.makeText(Thread.this, "Only 1 page!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (currentPage == totalPages){
+			Toast.makeText(Thread.this, "This is the last page", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (currentPage == 1){
+			Toast.makeText(Thread.this, "Going to second page!", Toast.LENGTH_SHORT).show();
+			Bundle b = getIntent().getExtras();
+			String link = b.getString("link");
+			link = link + "?page=2";
+			Log.d("STUFF AAA", link);
+			initWebView(link);
+
+		}
+		else {
+			int cur = currentPage + 1;
+			Toast.makeText(Thread.this, "Going to page " + cur, Toast.LENGTH_SHORT).show();
+			Bundle b = getIntent().getExtras();
+			String link = b.getString("link") + "?page=" + currentPage;
+			String updatedLink = replaceLast(link, String.valueOf(currentPage), String.valueOf(cur));
+			Log.d("STUFF AAA", updatedLink);
+			initWebView(updatedLink);
+		}
+	}
+
+
+
+
+
+	@Override
+	public void onBottomReached(View v) {
+		if (totalPages == 1){
+			Toast.makeText(Thread.this, "Only 1 page!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (currentPage == totalPages){
+			Toast.makeText(Thread.this, "This is the last page", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (currentPage == 1){
+			Toast.makeText(Thread.this, "Going to second page!", Toast.LENGTH_SHORT).show();
+			Bundle b = getIntent().getExtras();
+			String link = b.getString("link");
+			link = link + "?page=2";
+			Log.d("STUFF AAA", link);
+			initWebView(link);
+
+		}
+		else {
+			int cur = currentPage + 1;
+			Toast.makeText(Thread.this, "Going to page " + cur, Toast.LENGTH_SHORT).show();
+			Bundle b = getIntent().getExtras();
+			String link = b.getString("link");
+			String updatedLink = replaceLast(link, String.valueOf(currentPage), String.valueOf(cur));
+			initWebView(updatedLink);
+		}
+	}
+
+	public static String replaceLast(String string, String toReplace, String replacement) {
+		int pos = string.lastIndexOf(toReplace);
+		if (pos > -1) {
+			return string.substring(0, pos)
+					+ replacement
+					+ string.substring(pos + toReplace.length(), string.length());
+		} else {
+			return string;
+		}
+	}
+
+
 }
