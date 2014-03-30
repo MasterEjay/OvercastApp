@@ -47,7 +47,6 @@ public class Thread extends Activity {
 			return;
 		}
 		Element e = doc.getElementsByClass("span9").get(0);
-
-		webview.loadData(e.html(), "text/html", null);
+		webview.loadDataWithBaseURL("http://netdna.bootstrapcdn.com/bootstrap/2.3.2/css/bootstrap.min.css", e.html(), "text/html", "utf-8", null);
 	}
 }

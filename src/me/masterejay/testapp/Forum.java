@@ -6,8 +6,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import me.masterejay.testapp.widget.UITableView;
 import me.masterejzz.testapp.R;
@@ -35,10 +40,31 @@ public class Forum extends Activity{
 		Toast.makeText(Forum.this, "Please wait while we fetch the latest news!", Toast.LENGTH_SHORT).show();
 
 		tableView = (UITableView) findViewById(R.id.tableView);
-
-		 sendAsyncTask();
+		sendAsyncTask();
 
 		Log.d("Forum","total items: "+ tableView.getCount());
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.forum_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+			case R.id.action_settings:
+				Toast.makeText(Forum.this, "Please wait while we fetch the latest news!", Toast.LENGTH_SHORT).show();
+				sendAsyncTask();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
 	}
 
 	private void createList() {
@@ -75,7 +101,7 @@ public class Forum extends Activity{
 		public void onClick(int index) {
 			Intent intent = new Intent(Forum.this, Thread.class);
 			Bundle b = new Bundle();
-			b.putString("link", getEntryFromId(index).getLink()); //Your id
+			b.putString("link",getEntryFromId(index).getLink()); //Your id
 			intent.putExtras(b); //Put your id to your next Intent
 			startActivity(intent);
 		}
