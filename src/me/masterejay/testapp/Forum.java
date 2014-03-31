@@ -117,7 +117,7 @@ public class Forum extends Activity{
 				Toast.makeText(Forum.this, "Something went wrong! Are you sure you're online?", Toast.LENGTH_LONG).show();
 				return;
 			}
-
+			entries.clear();
 			Elements topics = doc.getElementsByClass("topic");
 			for (int i = 0; i < topics.size(); i++){
 				Element e = topics.get(i);
