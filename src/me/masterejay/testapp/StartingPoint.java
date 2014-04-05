@@ -1,6 +1,5 @@
 package me.masterejay.testapp;
 
-import android.net.Uri;
 import android.widget.ImageView;
 import me.masterejzz.testapp.R;
 
@@ -31,7 +30,7 @@ public class StartingPoint extends Activity {
 			}
 		});
 
-		view.setImageResource(R.drawable.octcicon);
+		view.setImageResource(R.drawable.forum);
 
 	}
 
