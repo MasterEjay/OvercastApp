@@ -5,5 +5,7 @@
           android:title="Forward"/>
     <item android:id="@+id/back"
           android:title="Back"/>
+    <item android:id="@+id/lastpage"
+          android:title="Last Page"/>
 
 </menu>

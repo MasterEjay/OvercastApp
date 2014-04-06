@@ -57,6 +57,10 @@ public class Thread extends Activity implements CustomWebView.OnBottomReachedLis
 				goForward();
 				return true;
 			case R.id.back:
+				goBackward();
+				return true;
+			case R.id.lastpage:
+				goForward(totalPages);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -129,6 +133,56 @@ public class Thread extends Activity implements CustomWebView.OnBottomReachedLis
 		}
 		else {
 			int cur = currentPage + 1;
+			Toast.makeText(Thread.this, "Going to page " + cur, Toast.LENGTH_SHORT).show();
+			Bundle b = getIntent().getExtras();
+			String link = b.getString("link") + "?page=" + currentPage;
+			String updatedLink = replaceLast(link, String.valueOf(currentPage), String.valueOf(cur));
+			Log.d("STUFF AAA", updatedLink);
+			initWebView(updatedLink);
+		}
+	}
+
+
+	public void goBackward(){
+		if (totalPages == 1){
+			Toast.makeText(Thread.this, "Only 1 page!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (currentPage == 1){
+			Toast.makeText(Thread.this, "This is the first page", Toast.LENGTH_SHORT).show();
+		}
+		else {
+			int cur = currentPage - 1;
+			Toast.makeText(Thread.this, "Going to page " + cur, Toast.LENGTH_SHORT).show();
+			Bundle b = getIntent().getExtras();
+			String link = b.getString("link") + "?page=" + currentPage;
+			String updatedLink = replaceLast(link, String.valueOf(currentPage), String.valueOf(cur));
+			Log.d("STUFF AAA", updatedLink);
+			initWebView(updatedLink);
+		}
+	}
+
+
+	public void goForward(int pageTo){
+		if (totalPages == 1){
+			Toast.makeText(Thread.this, "Only 1 page!", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (currentPage == totalPages){
+			Toast.makeText(Thread.this, "This is the last page", Toast.LENGTH_SHORT).show();
+			return;
+		}
+		if (currentPage == 1){
+			Toast.makeText(Thread.this, "Going to second page!", Toast.LENGTH_SHORT).show();
+			Bundle b = getIntent().getExtras();
+			String link = b.getString("link");
+			link = link + "?page=2";
+			Log.d("STUFF AAA", link);
+			initWebView(link);
+
+		}
+		else {
+			int cur = currentPage + pageTo;
 			Toast.makeText(Thread.this, "Going to page " + cur, Toast.LENGTH_SHORT).show();
 			Bundle b = getIntent().getExtras();
 			String link = b.getString("link") + "?page=" + currentPage;
