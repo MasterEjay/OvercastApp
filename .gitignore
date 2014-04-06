@@ -18,3 +18,5 @@ Scrimmage/Scrimmage.iml
 Overcast-Scrimmage.iml
 /bin
 /target
+local.properties
+/gen
