@@ -37,7 +37,7 @@ public class Forum extends Activity{
 
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.forum);
-		Toast.makeText(Forum.this, "Please wait while we fetch the latest news!", Toast.LENGTH_SHORT).show();
+		Toast.makeText(Forum.this, "Loading...", Toast.LENGTH_SHORT).show();
 
 		tableView = (UITableView) findViewById(R.id.tableView);
 		sendAsyncTask();
@@ -59,7 +59,7 @@ public class Forum extends Activity{
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
 			case R.id.action_settings:
-				Toast.makeText(Forum.this, "Please wait while we fetch the latest news!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(Forum.this, "Loading...", Toast.LENGTH_SHORT).show();
 				sendAsyncTask();
 				return true;
 			default:
